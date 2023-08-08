@@ -3,7 +3,7 @@
 % This method will go through each pair of AP and PA volumes in the
 % respective functional runs and correct them using the field generated
 % from the MEAN images of both runs (i.e. the same distortion field is used
-% to correct all images.
+% to correct all images).
 %
 %
 % PREREQUISITE:
@@ -14,17 +14,7 @@
 % close all
 % clear variables
 
-function distortionCorrectionMean(AP_RUN_PATH, PA_RUN_PATH)
-
-
-%% USER INPUT
-
-% Define the path of the AP direction run:
-%AP_RUN_PATH = '/Users/samlaxer/Documents/Projects/Project_SL_001/first_level/sub-007/20221125/MRI/T2star_FID_EPI_sat/run_180001/run_180001_T2star_FID_EPI_sat_20221125091611_180001_d_mc.nii';
-
-% Define the path of the PA direction run:
-%PA_RUN_PATH = '/Users/samlaxer/Documents/Projects/Project_SL_001/first_level/sub-007/20221125/MRI/T2star_FID_EPI_sat/run_190001/run_190001_T2star_FID_EPI_sat_20221125091611_190001_d_mc.nii';
-
+function distortionCorrectionMean(AP_RUN_PATH, PA_RUN_PATH, TOPUP_CONFIG_FILE)
 
 %% Read in specified NIfTI files
 
@@ -68,7 +58,7 @@ cd(AP_PARENT_PATH)
 
 
 
-%% Generate single NIfTI of merged means
+%% Circular shift both volumes
 
 % Change the data matrix and header of the mean PA volume so it aligns with
 % the AP volume
@@ -93,12 +83,16 @@ end
 disp(PA_RUN_PATH_CIRCSHIFT)
 disp(AP_RUN_PATH_CIRCSHIFT)
 [PA_CIRCSHIFT_PATH, PA_CIRCSHIFT_FILENAME, PA_CIRCSHIFT_EXT] = fileparts(PA_RUN_PATH_CIRCSHIFT);
+[AP_CIRCSHIFT_PATH, AP_CIRCSHIFT_FILENAME, AP_CIRCSHIFT_EXT] = fileparts(AP_RUN_PATH_CIRCSHIFT);
 % Deal with case where extension is .nii.gz
 if strcmp(PA_CIRCSHIFT_EXT, '.gz')
     PA_CIRCSHIFT_FILENAME = PA_CIRCSHIFT_FILENAME(1:end-4);
     PA_CIRCSHIFT_EXT = '.nii.gz';
 end
-
+if strcmp(AP_CIRCSHIFT_EXT, '.gz')
+    AP_CIRCSHIFT_FILENAME = AP_CIRCSHIFT_FILENAME(1:end-4);
+    AP_CIRCSHIFT_EXT = '.nii.gz';
+end
 
 % Change data matrix orientation so it matches new header *** Not, the
 % above function was changed so it completes the matrix orientation too.
@@ -111,8 +105,8 @@ end
 
 cd(AP_PARENT_PATH)
 
-myfslmaths(AP_PATH, [AP_FILENAME, AP_EXT ' -Tmean ', AP_FILENAME, '_mean']);
-MEAN_AP_PATH = fullfile(AP_PATH, filesep, [AP_FILENAME, '_mean.nii.gz']);
+myfslmaths(AP_CIRCSHIFT_PATH, [AP_CIRCSHIFT_FILENAME, AP_CIRCSHIFT_EXT ' -Tmean ', AP_CIRCSHIFT_FILENAME, '_mean']);
+MEAN_AP_CIRCSHIFT_PATH = fullfile(AP_CIRCSHIFT_PATH, filesep, [AP_CIRCSHIFT_FILENAME, '_mean.nii.gz']);
 myfslmaths(PA_CIRCSHIFT_PATH, [PA_CIRCSHIFT_FILENAME, PA_CIRCSHIFT_EXT ' -Tmean ', PA_CIRCSHIFT_FILENAME, '_mean']);
 MEAN_PA_CIRCSHIFT_PATH = fullfile(PA_CIRCSHIFT_PATH, filesep, [PA_CIRCSHIFT_FILENAME, '_mean.nii.gz']);
 cd ..
@@ -130,7 +124,7 @@ cd(OUTPATH);
 %% Merge the volumes
 %----------------------------------------------------------------------
 % Create merged files and put them in merged pairs directory
-FILE1 = MEAN_AP_PATH;
+FILE1 = MEAN_AP_CIRCSHIFT_PATH;
 FILE2 = MEAN_PA_CIRCSHIFT_PATH;
 FILES = [FILE1, ' ', FILE2];
 MERGETYPE = '-t';
@@ -159,7 +153,7 @@ end
 MERGEDVOLS = OUTFILEPATH_MERGE;
 ACQPARAMS = [OUTPATH, filesep, 'acqparams.txt'];
 OUTFILEPATH_TOPUP = [OUTPATH, filesep, 'topup_fieldmap'];
-CONFIGFILE = '/Users/samlaxer/Documents/Projects/Project_SL_000/blipup_blipdown_distortion_test/sub-009_20221126/trial_20221205/b02b0_human.cnf';
+CONFIGFILE = TOPUP_CONFIG_FILE;
 if ~exist([OUTFILEPATH_TOPUP, '_fieldcoef.nii'], 'file') && ~exist([OUTFILEPATH_TOPUP, '_fieldcoef.nii.gz'], 'file')
     myfsltopup(MERGEDVOLS, ACQPARAMS, OUTFILEPATH_TOPUP, CONFIGFILE);
 else

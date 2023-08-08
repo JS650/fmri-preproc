@@ -385,7 +385,7 @@ function out_vol = nifti_circshift(reor_vol, ref_vol)
         % image's header info:
         newHeader = reorvol_info;
         newHeader.Transform = refvol_info.Transform;
-        niftiwrite(flip_reorvol_data, outvol_filepath, newHeader, 'Compressed', true);%reorvol_info);
+        niftiwrite(flip_reorvol_data, [outvol_filepath, '.'], newHeader, 'Compressed', true);%reorvol_info);
         
         %% Update documentation file
 
