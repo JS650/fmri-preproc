@@ -20,7 +20,9 @@ setenv('PATH', [getenv('PATH') ':<path_to_fsl_binaries>'])
 ```
 
 AFNI
+```
 setenv('PATH', [getenv('PATH') ':<path_to_afni_binaries>']);
+```
 
 Note, you might have to replace the ':/usr/local/fsl/bin' with the path where fsl was installed on your computer.
 
