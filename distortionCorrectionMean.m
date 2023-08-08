@@ -16,6 +16,12 @@
 
 function distortionCorrectionMean(AP_RUN_PATH, PA_RUN_PATH, TOPUP_CONFIG_FILE)
 
+% Add current location to matlab path
+filePath = matlab.desktop.editor.getActiveFilename;
+path_to_add = fileparts(filePath);
+addpath(path_to_add);
+
+
 %% Read in specified NIfTI files
 
 AP_INFO = niftiinfo(AP_RUN_PATH);
@@ -169,6 +175,10 @@ APPAINDEX = {'1', '2'};
 ACQPARAMS_APPLYTOPUP = ACQPARAMS;
 myfslapplytopup(DISTORTEDVOLS{1}, TOPUPVOL, APPAINDEX{1}, ACQPARAMS_APPLYTOPUP, 'jac')
 myfslapplytopup(DISTORTEDVOLS{2}, TOPUPVOL, APPAINDEX{2}, ACQPARAMS_APPLYTOPUP, 'jac')
+
+%% Remove directory added to path at beginning of function
+
+rmpath(path_to_add);
 
 
 end
