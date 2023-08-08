@@ -11,11 +11,16 @@ Definitions of each function are shown below:
 Additionally, there are batch functions that integrate several of the core functions above to complete common tasks. For instance, distortionCorrection_mean.m uses fslmerge, topup, applytopup, fslmaths and nifti_circshift to complete distortion correction, all packed into one function.
 
 ### Requirements
-Have FSL installed and add to MATLAB path.
+Have FSL and AFNI installed and add to MATLAB path.
 Do so by adding the following code to the startup.m file:
+
+FSL
 ```
-setenv('PATH', [getenv('PATH') ':/usr/local/fsl/bin'])
+setenv('PATH', [getenv('PATH') ':<path_to_fsl_binaries>'])
 ```
+
+AFNI
+setenv('PATH', [getenv('PATH') ':<path_to_afni_binaries>']);
 
 Note, you might have to replace the ':/usr/local/fsl/bin' with the path where fsl was installed on your computer.
 
