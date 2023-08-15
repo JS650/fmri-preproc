@@ -109,7 +109,8 @@ end
 
 %% Generate mean volumes from each run
 
-cd(AP_PARENT_PATH)
+% cd(AP_PARENT_PATH)
+cd(AP_PATH)
 
 myfslmaths(AP_CIRCSHIFT_PATH, [AP_CIRCSHIFT_FILENAME, AP_CIRCSHIFT_EXT ' -Tmean ', AP_CIRCSHIFT_FILENAME, '_mean']);
 MEAN_AP_CIRCSHIFT_PATH = fullfile(AP_CIRCSHIFT_PATH, filesep, [AP_CIRCSHIFT_FILENAME, '_mean.nii.gz']);
@@ -118,7 +119,8 @@ MEAN_PA_CIRCSHIFT_PATH = fullfile(PA_CIRCSHIFT_PATH, filesep, [PA_CIRCSHIFT_FILE
 cd ..
 
 %% Create new directory to hold merged mean volumes and change that to current working directory
-OUTPATH = [AP_PARENT_PATH, filesep, 'merged_mean_', AP_PARENT_DIR, '_and_', PA_PARENT_DIR];
+% OUTPATH = [AP_PARENT_PATH, filesep, 'merged_mean_', AP_PARENT_DIR, '_and_', PA_PARENT_DIR];
+OUTPATH = [AP_PATH, filesep, 'merged_mean_', AP_PARENT_DIR, '_and_', PA_PARENT_DIR];
 if ~exist(OUTPATH, "dir") 
     mkdir(OUTPATH);
     disp(['Created directory: ', OUTPATH]);
@@ -147,7 +149,7 @@ end
 % Create acqparams.txt file in OUTFILEPATH directory
 if ~exist([OUTPATH, filesep, 'acqparams.txt'], 'file')
     fid = fopen([OUTPATH, filesep, 'acqparams.txt'], 'a');
-    fprintf(fid, "0 -1 0 1\n0 1 0 1\n");
+    fprintf(fid, "0 -1 0 0.1\n0 1 0 0.1\n");
     fclose(fid);
 
     disp('No acqparams.txt file found. Creating one with default values.');
