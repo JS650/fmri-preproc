@@ -344,7 +344,7 @@ function out_vol = nifti_circshift(reor_vol, ref_vol)
     % circshift(M, 1, 3) to circularly shift M in the CORONAL direction
     % (shifting towards the anterior)
     if i_shift
-        if strcmp(reor_orientaion(3), 'S')
+        if strcmp(reor_orientation(3), 'S')
             circshift_reorvol_data = circshift(circshift_reorvol_data, i_shift, 3);
             disp(['Volume was circularly shifted by ', num2str(i_shift), ' voxels in the 3rd dimension.'])
         elseif strcmp(reor_orientation(3), 'I')
