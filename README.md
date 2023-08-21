@@ -24,7 +24,5 @@ AFNI
 setenv('PATH', [getenv('PATH') ':<path_to_afni_binaries>']);
 ```
 
-Note, you might have to replace the ':/usr/local/fsl/bin' with the path where fsl was installed on your computer.
-
 For more information on FSL, visit: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSL
 For more information on AFNI, visit: https://afni.nimh.nih.gov/
