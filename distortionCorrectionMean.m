@@ -36,11 +36,11 @@ PA_DATA = niftiread(PA_INFO);
 NUM_AP_VOLS = AP_INFO.raw.dim(5);
 NUM_PA_VOLS = PA_INFO.raw.dim(5);
 
-% SANITY CHECK: make sure the number of volumes is the same between AP
-% and PA runs:
-if ~(NUM_AP_VOLS == NUM_PA_VOLS)
-    error("The number of volumes does not match between the two runs.")
-end
+% % SANITY CHECK: make sure the number of volumes is the same between AP
+% % and PA runs:
+% if ~(NUM_AP_VOLS == NUM_PA_VOLS)
+%     error("The number of volumes does not match between the two runs.")
+% end
 
 % Separate the file paths into cell arrays consisting of each directory in
 % order
@@ -77,7 +77,7 @@ PA_RUN_PATH_CIRCSHIFT = nifti_circshift(PA_RUN_PATH, AP_RUN_PATH);
 AP_RUN_PATH_CIRCSHIFT = nifti_circshift(AP_RUN_PATH, AP_RUN_PATH); % Shouldn't change anything but creates same file with the _circshift extension
 
 % If nifti_circshift runs and sees that the output file already exists,
-% the it will return false. We can thus just continue with the program
+% then it will return false. We can thus just continue with the program
 % setting the variable to the appropriate variable name:
 if islogical(PA_RUN_PATH_CIRCSHIFT)
     PA_RUN_PATH_CIRCSHIFT = append(PA_RUN_PATH(1:end-4), '_circshift.nii.gz');
